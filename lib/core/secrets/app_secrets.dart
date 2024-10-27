@@ -1,0 +1,2 @@
+const String supBaseUrl="https://gzfzkhbcstwittykvjqk.supabase.co";
+const String anonKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6ZnpraGJjc3R3aXR0eWt2anFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAwMTc1ODYsImV4cCI6MjA0NTU5MzU4Nn0.OLzwz0UmyfF_t1GowwzYFEvP8jevaYAhZK7hWBoPEWw";
