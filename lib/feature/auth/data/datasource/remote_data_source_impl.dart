@@ -17,10 +17,10 @@ class RemoteDataSourceImpl implements IAuthRemoteDataSource {
       required String password,
       required String name}) async {
     try {
-      final AuthResponse authResponse =
-          await supabaseClient.auth.signUp(password: password, data: {
-        "name": name,
-      });
+      final AuthResponse authResponse = await supabaseClient.auth.signUp(
+        email: email,
+        password: password,
+      );
       if (authResponse.user != null) {
         return authResponse.user!.id;
       } else {
