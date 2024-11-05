@@ -1,6 +1,8 @@
+import 'package:blog/feature/auth/domain/entities/user.dart';
+
 abstract interface class IAuthRemoteDataSource {
-  Future<String> logInWithEmailAndPassword(
+  Future<User> logInWithEmailAndPassword(
       {required String email, required String password});
-  Future<String> signUpWithEmailAndPassword(
+  Future<User> signUpWithEmailAndPassword(
       {required String email, required String password, required String name});
 }

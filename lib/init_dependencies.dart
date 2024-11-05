@@ -1,6 +1,7 @@
 import 'package:blog/core/secrets/app_secrets.dart';
 import 'package:blog/feature/auth/data/datasource/remote_data_source_impl.dart';
 import 'package:blog/feature/auth/data/repositories/auth_repo_impl.dart';
+import 'package:blog/feature/auth/domain/usecases/user_login_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -22,6 +23,9 @@ _initAuth() {
       authRemoteDataSource: serviceLocator<RemoteDataSourceImpl>()));
   serviceLocator.registerFactory(
       () => UserSignUpUseCase(authRepoSitory: serviceLocator<AuthRepoImpl>()));
-  serviceLocator.registerLazySingleton(
-      () => AuthBloc(useCase: serviceLocator<UserSignUpUseCase>()));
+  serviceLocator.registerFactory(
+      () => UserLoginUsecase(authRepo: serviceLocator<AuthRepoImpl>()));
+  serviceLocator.registerLazySingleton(() => AuthBloc(
+      userSignUpUseCase: serviceLocator<UserSignUpUseCase>(),
+      userLoginUseCase: serviceLocator<UserLoginUsecase>()));
 }
