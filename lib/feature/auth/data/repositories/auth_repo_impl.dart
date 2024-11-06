@@ -1,7 +1,7 @@
 import 'package:blog/core/error/exceptions.dart';
 import 'package:blog/core/error/failures.dart';
 import 'package:blog/feature/auth/data/datasource/remote_data_source_repo.dart';
-import 'package:blog/feature/auth/domain/entities/user.dart';
+import 'package:blog/core/entities/user.dart';
 import 'package:blog/feature/auth/domain/repository/auth_repo.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -23,6 +23,17 @@ class AuthRepoImpl implements IAuthRepoSitory {
     return _getUser(() async =>
         await authRemoteDataSource.signUpWithEmailAndPassword(
             email: email, password: password, name: name));
+  }
+
+  @override
+  Future<Either<Failure, User>> getUserData() async {
+    try {
+      final User? user = await authRemoteDataSource.getCurrentUserData();
+      if (user == null) return left(Failure('User is not logged in'));
+      return right(user);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
   }
 }
 

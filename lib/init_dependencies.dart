@@ -1,6 +1,8 @@
+import 'package:blog/core/common/cubit/app_user_cubit.dart';
 import 'package:blog/core/secrets/app_secrets.dart';
 import 'package:blog/feature/auth/data/datasource/remote_data_source_impl.dart';
 import 'package:blog/feature/auth/data/repositories/auth_repo_impl.dart';
+import 'package:blog/feature/auth/domain/usecases/user_get_data_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_login_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/feature/auth/presentation/bloc/auth_bloc.dart';
@@ -14,6 +16,7 @@ Future<void> initDependencies() async {
   final Supabase supBase =
       await Supabase.initialize(anonKey: anonKey, url: supBaseUrl);
   serviceLocator.registerLazySingleton(() => supBase.client);
+   serviceLocator.registerLazySingleton(() => AppUserCubit());
 }
 
 _initAuth() {
@@ -25,7 +28,11 @@ _initAuth() {
       () => UserSignUpUseCase(authRepoSitory: serviceLocator<AuthRepoImpl>()));
   serviceLocator.registerFactory(
       () => UserLoginUsecase(authRepo: serviceLocator<AuthRepoImpl>()));
+  serviceLocator.registerFactory(
+      () => UserGetDataUsecase(authRepoSitory: serviceLocator<AuthRepoImpl>()));
   serviceLocator.registerLazySingleton(() => AuthBloc(
+      appUserCubit: serviceLocator<AppUserCubit>(),
+      userGetDataUsecase: serviceLocator<UserGetDataUsecase>(),
       userSignUpUseCase: serviceLocator<UserSignUpUseCase>(),
       userLoginUseCase: serviceLocator<UserLoginUsecase>()));
 }
