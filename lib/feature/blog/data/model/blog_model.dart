@@ -1,6 +1,5 @@
 import 'package:blog/feature/blog/domain/entities/blog.dart';
 
-
 class BlogModel extends Blog {
   BlogModel({
     required super.id,

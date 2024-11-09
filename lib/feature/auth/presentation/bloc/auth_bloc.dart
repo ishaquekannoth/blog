@@ -33,19 +33,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<IsUserLoggedIn>(_onIsUserSignedIn);
   }
   void _onAuthSignUp(AuthSignup event, Emitter<AuthState> emit) async {
-    final result = await _userSignUpUseCase(event.params);
+    final result = await _userSignUpUseCase(parameters:  event.params);
     result.fold((failure) => emit(AuthFailure(message: failure.message)),
         (success) => _emitAuthSuccess(success, emit));
   }
 
   void _onAuthLogin(AuthLogin event, Emitter<AuthState> emit) async {
-    final result = await _userLoginUseCase(event.params);
+    final result = await _userLoginUseCase(parameters:  event.params);
     result.fold((failure) => emit(AuthFailure(message: failure.message)),
         (success) => _emitAuthSuccess(success, emit));
   }
 
   void _onIsUserSignedIn(IsUserLoggedIn event, Emitter<AuthState> emit) async {
-    final result = await _userGetDataUsecase(NoParam());
+    final result = await _userGetDataUsecase(parameters:  NoParam());
     result.fold((failure) => emit(AuthFailure(message: failure.message)),
         (success) => _emitAuthSuccess(success, emit));
   }

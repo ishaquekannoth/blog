@@ -6,6 +6,11 @@ import 'package:blog/feature/auth/domain/usecases/user_get_data_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_login_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/feature/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog/feature/blog/data/data_source/blog_remote_data_source_impl.dart';
+import 'package:blog/feature/blog/data/repositories/blog_repo_impl.dart';
+import 'package:blog/feature/blog/domain/use_cases/get_all_blogs_use_case.dart';
+import 'package:blog/feature/blog/domain/use_cases/upload_blog_usecase.dart';
+import 'package:blog/feature/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,10 +18,11 @@ final GetIt serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initAuth();
+  _initBlog();
   final Supabase supBase =
       await Supabase.initialize(anonKey: anonKey, url: supBaseUrl);
   serviceLocator.registerLazySingleton(() => supBase.client);
-   serviceLocator.registerLazySingleton(() => AppUserCubit());
+  serviceLocator.registerLazySingleton(() => AppUserCubit());
 }
 
 _initAuth() {
@@ -35,4 +41,20 @@ _initAuth() {
       userGetDataUsecase: serviceLocator<UserGetDataUsecase>(),
       userSignUpUseCase: serviceLocator<UserSignUpUseCase>(),
       userLoginUseCase: serviceLocator<UserLoginUsecase>()));
+}
+
+_initBlog() {
+  serviceLocator.registerFactory(() => BlogRemoteDataSourceImpl(
+      supabaseClient: serviceLocator<SupabaseClient>()));
+  serviceLocator.registerFactory(() =>
+      BlogRepoImpl(dataSource: serviceLocator<BlogRemoteDataSourceImpl>()));
+  serviceLocator.registerFactory(
+      () => UploadBlogUsecase(blogRepository: serviceLocator<BlogRepoImpl>()));
+  serviceLocator.registerFactory(
+      () => GetAllBlogsUseCase(blogRepository: serviceLocator<BlogRepoImpl>()));
+  serviceLocator.registerLazySingleton(
+    () => BlogBloc(
+        uploadBlogUsecase: serviceLocator<UploadBlogUsecase>(),
+        getAllBlogsUseCase: serviceLocator<GetAllBlogsUseCase>()),
+  );
 }

@@ -33,4 +33,19 @@ class BlogRemoteDataSourceImpl implements IBlogDataSource {
       throw ServerException(message: e.toString());
     }
   }
+
+  @override
+  Future<List<BlogModel>> getAllBlogs() async {
+    try {
+      final blogs = await supabaseClient.from('blogs').select(
+            '* ,profiles(name)',
+          );
+      return blogs
+          .map((element) => BlogModel.fromJson(element)
+              .copyWith(posterName: element['profiles']['name']))
+          .toList();
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
 }

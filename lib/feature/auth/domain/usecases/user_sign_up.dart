@@ -8,9 +8,9 @@ class UserSignUpUseCase implements UseCase<User, UserSignUpParams> {
   final IAuthRepoSitory authRepoSitory;
   UserSignUpUseCase({required this.authRepoSitory});
   @override
-  Future<Either<Failure, User>> call(params) async {
+  Future<Either<Failure, User>> call({required UserSignUpParams parameters}) async {
     return await authRepoSitory.signUpWithEmailAndPassword(
-        email: params.email, password: params.password, name: params.name);
+        email: parameters.email, password: parameters.password, name: parameters.name);
   }
 }
 

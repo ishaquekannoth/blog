@@ -9,8 +9,12 @@ class UserGetDataUsecase implements UseCase<User, NoParam> {
   UserGetDataUsecase({
     required this.authRepoSitory,
   });
+  
   @override
-  Future<Either<Failure, User>> call(NoParam noParam) async {
-    return await authRepoSitory.getUserData();
+  Future<Either<Failure, User>> call({required NoParam parameters})async {
+   return await authRepoSitory.getUserData();
   }
+ 
 }
+
+
