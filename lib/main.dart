@@ -2,6 +2,7 @@ import 'package:blog/core/common/cubit/app_user_cubit.dart';
 import 'package:blog/core/theme/theme.dart';
 import 'package:blog/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog/feature/auth/presentation/pages/login.dart';
+import 'package:blog/feature/blog/presentation/pages/blog_page.dart';
 import 'package:blog/init_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,11 +45,7 @@ class _MyAppState extends State<MyApp> {
           },
           builder: (context, isLoggedIn) {
             if (isLoggedIn) {
-              return const Scaffold(
-                body: Center(
-                  child: Text("Logged In"),
-                ),
-              );
+              return const BlogPage();
             }
             return const LoginPage();
           },

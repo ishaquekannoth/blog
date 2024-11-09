@@ -1,11 +1,11 @@
-import 'package:blog/core/entities/user.dart';
+import 'package:blog/feature/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show Session;
 
 abstract interface class IAuthRemoteDataSource {
   Session? get currentSession;
-  Future<User> logInWithEmailAndPassword(
+  Future<UserModel> logInWithEmailAndPassword(
       {required String email, required String password});
-  Future<User> signUpWithEmailAndPassword(
+  Future<UserModel> signUpWithEmailAndPassword(
       {required String email, required String password, required String name});
-  Future<User?> getCurrentUserData();
+  Future<UserModel?> getCurrentUserData();
 }
