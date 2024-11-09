@@ -1,9 +1,8 @@
-import 'package:fpdart/src/either.dart';
-
 import 'package:blog/core/error/failures.dart';
 import 'package:blog/core/usecase/use_case.dart';
 import 'package:blog/feature/blog/domain/entities/blog.dart';
 import 'package:blog/feature/blog/domain/repositories/blog_repo.dart';
+import 'package:fpdart/fpdart.dart';
 
 class GetAllBlogsUseCase implements UseCase<List<Blog>, NoParam> {
   IBlogRepository blogRepository;

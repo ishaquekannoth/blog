@@ -1,7 +1,9 @@
 import 'package:blog/core/common/loader.dart';
+import 'package:blog/core/theme/app_pallete.dart';
 import 'package:blog/core/utils/show_snackbar.dart';
 import 'package:blog/feature/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog/feature/blog/presentation/pages/add_new_page.dart';
+import 'package:blog/feature/blog/presentation/widgets/blog_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +55,13 @@ class _BlogPageState extends State<BlogPage> {
                   context,
                   index,
                 ) {
-                  return Text(state.blogs[index].title);
+                  return BlogCard(
+                      blog: state.blogs[index],
+                      color: index % 3 == 0
+                          ? AppPallete.gradient1
+                          : index % 3 == 1
+                              ? AppPallete.gradient2
+                              : AppPallete.gradient3);
                 });
           }
           return const SizedBox();

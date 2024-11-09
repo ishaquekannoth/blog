@@ -6,7 +6,6 @@ import 'package:blog/feature/blog/data/data_source/blog_remote_data_source.dart'
 import 'package:blog/feature/blog/data/model/blog_model.dart';
 import 'package:blog/feature/blog/domain/entities/blog.dart';
 import 'package:blog/feature/blog/domain/repositories/blog_repo.dart';
-import 'package:blog/feature/blog/presentation/bloc/blog_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 
