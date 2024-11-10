@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:blog/core/error/exceptions.dart';
 import 'package:blog/core/error/failures.dart';
+import 'package:blog/core/network/connection_checker.dart';
+import 'package:blog/feature/blog/data/data_source/blog_local_data_source.dart';
 import 'package:blog/feature/blog/data/data_source/blog_remote_data_source.dart';
 import 'package:blog/feature/blog/data/model/blog_model.dart';
 import 'package:blog/feature/blog/domain/entities/blog.dart';
@@ -11,9 +13,12 @@ import 'package:uuid/uuid.dart';
 
 class BlogRepoImpl implements IBlogRepository {
   IBlogDataSource dataSource;
-  BlogRepoImpl({
-    required this.dataSource,
-  });
+  IBlogLocalDataSouce localDataSouce;
+  ConnectionChecker connectionChecker;
+  BlogRepoImpl(
+      {required this.dataSource,
+      required this.localDataSouce,
+      required this.connectionChecker});
   @override
   Future<Either<Failure, Blog>> uploadBlog(
       {required String title,
@@ -22,6 +27,9 @@ class BlogRepoImpl implements IBlogRepository {
       required List<String> topics,
       required File image}) async {
     try {
+      if (!await connectionChecker.isConnected) {
+        return left(Failure('No internet Connection'));
+      }
       BlogModel blogModel = BlogModel(
           id: const Uuid().v1(),
           posterId: posterId,
@@ -42,10 +50,19 @@ class BlogRepoImpl implements IBlogRepository {
   @override
   Future<Either<Failure, List<Blog>>> getAllBlogs() async {
     try {
+      if (!await connectionChecker.isConnected) {
+        return right(await localDataSouce.loadBlogFromDisk());
+      }
       final result = await dataSource.getAllBlogs();
+      await localDataSouce.saveBlogToDisk(blogs: result);
       return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
+  }
+
+  @override
+  Future<Either<Failure, String>> clearAllData() async {
+    return right(await localDataSouce.clearAllData());
   }
 }

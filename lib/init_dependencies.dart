@@ -7,7 +7,9 @@ import 'package:blog/feature/auth/domain/usecases/user_get_data_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_login_usecase.dart';
 import 'package:blog/feature/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog/feature/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog/feature/blog/data/data_source/blog_local_data_source_impl.dart';
 import 'package:blog/feature/blog/data/data_source/blog_remote_data_source_impl.dart';
+import 'package:blog/feature/blog/data/data_source/data_base_helper.dart';
 import 'package:blog/feature/blog/data/repositories/blog_repo_impl.dart';
 import 'package:blog/feature/blog/domain/use_cases/get_all_blogs_use_case.dart';
 import 'package:blog/feature/blog/domain/use_cases/upload_blog_usecase.dart';
@@ -26,8 +28,10 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(() => supBase.client);
   serviceLocator.registerLazySingleton(() => AppUserCubit());
   serviceLocator.registerFactory(() => InternetConnection());
-  serviceLocator.registerFactory<ConnectionChecker>(() => ConnectionCheckerImpl(
+  serviceLocator.registerLazySingleton(() => ConnectionCheckerImpl(
       internetConnectionChecker: serviceLocator<InternetConnection>()));
+  serviceLocator.registerFactory(
+      () => BlogLocalDataSourceImpl(databaseHelper: DatabaseHelper()));
 }
 
 _initAuth() {
@@ -35,7 +39,7 @@ _initAuth() {
       RemoteDataSourceImpl(supabaseClient: serviceLocator<SupabaseClient>()));
 
   serviceLocator.registerFactory(() => AuthRepoImpl(
-      connectionChecker: serviceLocator<ConnectionChecker>(),
+      connectionChecker: serviceLocator<ConnectionCheckerImpl>(),
       authRemoteDataSource: serviceLocator<RemoteDataSourceImpl>()));
   serviceLocator.registerFactory(
       () => UserSignUpUseCase(authRepoSitory: serviceLocator<AuthRepoImpl>()));
@@ -53,8 +57,10 @@ _initAuth() {
 _initBlog() {
   serviceLocator.registerFactory(() => BlogRemoteDataSourceImpl(
       supabaseClient: serviceLocator<SupabaseClient>()));
-  serviceLocator.registerFactory(() =>
-      BlogRepoImpl(dataSource: serviceLocator<BlogRemoteDataSourceImpl>()));
+  serviceLocator.registerFactory(() => BlogRepoImpl(
+      localDataSouce: serviceLocator<BlogLocalDataSourceImpl>(),
+      connectionChecker: serviceLocator<ConnectionCheckerImpl>(),
+      dataSource: serviceLocator<BlogRemoteDataSourceImpl>()));
   serviceLocator.registerFactory(
       () => UploadBlogUsecase(blogRepository: serviceLocator<BlogRepoImpl>()));
   serviceLocator.registerFactory(

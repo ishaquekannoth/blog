@@ -12,4 +12,5 @@ abstract interface class IBlogRepository {
       required List<String> topics,
       required File image});
   Future<Either<Failure, List<Blog>>> getAllBlogs();
+  Future<Either<Failure, String>> clearAllData();
 }
