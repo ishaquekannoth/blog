@@ -1,3 +1,2 @@
-const String supBaseUrl="https://wuzjcriqhvqieestnelr.supabase.co";
-const String anonKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1empjcmlxaHZxaWVlc3RuZWxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAxMzUwMDgsImV4cCI6MjA0NTcxMTAwOH0.WYPWZ4dLS433sFlilW390hoOvOIKRHIshVSySPtQ6lQ";
-
+const String supBaseUrl="";
+const String anonKey="";
