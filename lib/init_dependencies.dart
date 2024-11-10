@@ -11,6 +11,7 @@ import 'package:blog/feature/blog/data/data_source/blog_local_data_source_impl.d
 import 'package:blog/feature/blog/data/data_source/blog_remote_data_source_impl.dart';
 import 'package:blog/feature/blog/data/data_source/data_base_helper.dart';
 import 'package:blog/feature/blog/data/repositories/blog_repo_impl.dart';
+import 'package:blog/feature/blog/domain/use_cases/clear_database_use_case.dart';
 import 'package:blog/feature/blog/domain/use_cases/get_all_blogs_use_case.dart';
 import 'package:blog/feature/blog/domain/use_cases/upload_blog_usecase.dart';
 import 'package:blog/feature/blog/presentation/bloc/blog_bloc.dart';
@@ -63,10 +64,13 @@ _initBlog() {
       dataSource: serviceLocator<BlogRemoteDataSourceImpl>()));
   serviceLocator.registerFactory(
       () => UploadBlogUsecase(blogRepository: serviceLocator<BlogRepoImpl>()));
+        serviceLocator.registerFactory(
+      () => ClearAllDatabaseUseCase(blogRepository: serviceLocator<BlogRepoImpl>()));
   serviceLocator.registerFactory(
       () => GetAllBlogsUseCase(blogRepository: serviceLocator<BlogRepoImpl>()));
   serviceLocator.registerLazySingleton(
     () => BlogBloc(
+        clearAllDatabaseUseCase: serviceLocator<ClearAllDatabaseUseCase>(),
         uploadBlogUsecase: serviceLocator<UploadBlogUsecase>(),
         getAllBlogsUseCase: serviceLocator<GetAllBlogsUseCase>()),
   );

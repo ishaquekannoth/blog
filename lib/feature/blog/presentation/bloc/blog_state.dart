@@ -9,14 +9,18 @@ final class BlogLoading extends BlogState {}
 final class BlogUploadSuccess extends BlogState {
   BlogUploadSuccess();
 }
+
+final class BlogOperationSuccess extends BlogState {
+  final String message;
+  BlogOperationSuccess({required this.message});
+}
+
 final class BlogOperationFailure extends BlogState {
   final String error;
   BlogOperationFailure({required this.error});
 }
+
 final class BlogFetchSuccess extends BlogState {
   final List<Blog> blogs;
   BlogFetchSuccess({required this.blogs});
-} 
-
-
-
+}

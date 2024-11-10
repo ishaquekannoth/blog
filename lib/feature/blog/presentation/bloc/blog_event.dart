@@ -8,3 +8,4 @@ final class BlogUpload extends BlogEvent {
 
 }
 final class BlogsFetchAll extends BlogEvent{}
+final class BlogClearAll extends BlogEvent{}

@@ -33,9 +33,14 @@ class _BlogPageState extends State<BlogPage> {
         actions: [
           IconButton(
               onPressed: () {
+                // context.read<BlogBloc>().add(BlogClearAll());
+              },
+              icon: const Icon(CupertinoIcons.delete)),
+          IconButton(
+              onPressed: () {
                 Navigator.push(context, AddNewBlogPage.route());
               },
-              icon: const Icon(CupertinoIcons.add_circled_solid))
+              icon: const Icon(CupertinoIcons.add_circled_solid)),
         ],
       ),
       body: BlocConsumer<BlogBloc, BlogState>(
@@ -43,12 +48,15 @@ class _BlogPageState extends State<BlogPage> {
           if (state is BlogOperationFailure) {
             showSnackBar(context, state.error);
           }
+          if (state is BlogOperationSuccess) {
+            showSnackBar(context, state.message);
+          }
         },
         builder: (context, state) {
           if (state is BlogLoading) {
             return const Loader();
           }
-          if (state is BlogFetchSuccess) {
+          if (state is BlogFetchSuccess && state.blogs.isNotEmpty) {
             return ListView.builder(
                 itemCount: state.blogs.length,
                 itemBuilder: (
@@ -64,7 +72,13 @@ class _BlogPageState extends State<BlogPage> {
                               : AppPallete.gradient3);
                 });
           }
-          return const SizedBox();
+          return Center(
+            child: FloatingActionButton(
+                child: const Icon(Icons.restart_alt),
+                onPressed: () {
+                  context.read<BlogBloc>().add(BlogsFetchAll());
+                }),
+          );
         },
       ),
     );
